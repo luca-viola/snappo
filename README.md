@@ -25,3 +25,5 @@ designed as a frontend to a shell script that leverages a few commands to work i
 `appindicator`  
 `notify`  
 
+**MacOS**  
+(Coming soon)
