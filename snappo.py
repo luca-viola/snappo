@@ -116,7 +116,7 @@ class Snappo:
         self._add_menu_item('Grab Window..', self._grab_window)
         self._add_menu_item('Grab Area..', self._grab_area)
         self.menu.append(gtk.SeparatorMenuItem())
-        self.delay_widget=self._add_menu_item('Set delay..', self.show_slider)
+        self.delay_widget=self._add_menu_item('Set delay..', self.show_delay_dialog)
         self.menu.append(gtk.SeparatorMenuItem())
         clipboard_item = self._add_menu_item_with_icon('Clipboard', gi.repository.Gtk.STOCK_MISSING_IMAGE, self.show_thumb)
         self.screen_grabber.set_image_display(clipboard_item)
@@ -126,6 +126,7 @@ class Snappo:
         self.menu.append(gtk.SeparatorMenuItem())
         self._add_menu_item('OCR', self.screen_grabber.ocr)
         self.menu.append(gtk.SeparatorMenuItem())
+        self._add_menu_item('About..', self.show_about_dialog)
         self._add_menu_item('Quit', self.quit)
 
     def show_thumb(self, widget):
@@ -140,7 +141,42 @@ class Snappo:
           label=label+" ("+str(int(self.delay))+"s)"
         self.delay_widget.set_label(label)
 
-    def show_slider(self, widget):
+    def show_about_dialog(self, widget):
+        about = gtk.AboutDialog()
+        about.set_title("About..")
+        about.set_name("SNapshot APPlicatiOn")
+        about.set_program_name("Snappo")
+        about.set_version("V 0.1")
+        about.set_authors(["Luca Viola"])
+        about.set_copyright("© 2021 by Luca Viola")
+        about.set_comments("A Screen Snapshot tool with OCR\nand Barcode recognition capabilities")
+        about.set_website("https://github.com/luca-viola/snappo")
+        about.set_website_label("Snappo on Github")
+        about.set_logo(gi.repository.GdkPixbuf.Pixbuf.new_from_file_at_size("camera.svg", 64, 64))
+        about.set_license_type(gtk.License.GPL_3_0)
+        about.set_wrap_license(True)
+        about.set_license("""
+Snappo
+
+Copyright (C) 2021 Luca Viola
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        """)
+        about.run()
+        about.destroy()
+
+    def show_delay_dialog(self, widget):
         msg = "Set screenshot delay in seconds:"
         title = "Set Delay"
         dialog = gtk.MessageDialog( None, gtk.DialogFlags.MODAL, gtk.MessageType.QUESTION, gtk.ButtonsType.OK,  msg)
