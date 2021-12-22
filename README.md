@@ -39,3 +39,35 @@ In case of problems, more information about the installation of the python Gtk O
 **MacOS**  
 (Coming soon)
 
+### Usage
+<img src="docs/snappo_menu.png" alt="Main Menu" style="width:200px;"/>
+<img src="docs/snappo_timer.png" alt="Delay slider" style="width:200px;"/>  
+
+The usage is pretty straightforward. When started, an icon with a camera will appear in the gnome top menu bar.
+From this you can show the popup menu with some options:
+
+* **Grab Desktop**..  
+  Clicling on this the whole desktop (including multiple screens) will be snapshot into the clipboard.
+* **Grab Window**..  
+  Running under gnome/x11, this will show a selector with which you can choose a window to snap. Under wayland you 
+  need to select the window you want first, then select this menu voice to snap it.
+* **Grab Area**..  
+  This option will show a selector with which you can select a rectangular area on the screen to snap into the
+  clipboard.
+* **Set Delay**..  
+  This will open a small dialog in which you can put a delay before doing the snapshot. It is useful if you need to 
+  arrange the screen before the snap could be taken.
+* **Clipboard**.. 🚫 | 🔍  
+  This menu shows a 🚫 symbol when the clipboard is empty, and a 🔍 when it contains a snapshot image. By selecting it 
+  the content will be shown in the image viewer.
+* **Copy** ⎘  
+  This menu lets you reinsert the snaphot image in the clipboard, in case it was accidentally lost.
+* **Clear** ⌫  
+  This menu lets you erase the snaphost image from the clipboard and the persisted temporary file.
+* **OCR**  
+  By selecting this, Snappo will perform a barcode detection on the snapped image, decode it and put the resulting text
+  in the clipboard. If the barcode detection is unsuccessfull, an optical character recognition will be performed, and 
+  the resulting text copied in the clipboard. The barcodes recognized are the ones supported by the zbar package, and 
+  the OCR is performed by the open source package tesseract.
+* **Quit**  
+  Exits from Snappo and cleans up resources.
