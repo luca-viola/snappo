@@ -42,6 +42,7 @@ In case of problems, more information about the installation of the python Gtk O
 ### Usage
 <img src="docs/snappo_menu.png" alt="Main Menu" style="width:200px;"/>
 <img src="docs/snappo_timer.png" alt="Delay slider" style="width:200px;"/>  
+<img src="docs/snappo_about.png" alt="Delay slider" style="width:200px;"/>  
 
 The usage is pretty straightforward. When started, an icon with a camera will appear in the gnome top menu bar.
 From this you can show the popup menu with some options:
@@ -69,5 +70,7 @@ From this you can show the popup menu with some options:
   in the clipboard. If the barcode detection is unsuccessful, an optical character recognition will be performed, and 
   the resulting text copied in the clipboard. The barcodes recognized are the ones supported by the zbar package, and 
   the OCR is performed by the open source package tesseract.
+* **About**..  
+  Show an About dialog with credits and license.  
 * **Quit**  
   Exits from Snappo and cleans up resources.
