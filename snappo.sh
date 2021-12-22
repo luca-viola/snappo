@@ -1,13 +1,13 @@
 #!/bin/env bash
 
 TARGET_FILE="/tmp/snappo"
-SCREENSHOT_CMD="/usr/bin/gnome-screenshot"
-CLIPBOARD_CMD="/usr/bin/xclip -i -selection clipboard -target image/png"
-CLIPBOARD_TXT_CMD="/usr/bin/xclip -sel c"
-WIN_CMD='/usr/bin/xdotool'
-DISPLAY_CMD='/usr/bin/eog'
-BARCODE_SCAN_CMD='/usr/bin/zbarimg --raw -q'
-OCR_CMD="/usr/bin/tesseract"
+SCREENSHOT_CMD="$(which gnome-screenshot)"
+CLIPBOARD_CMD="$(which xclip) -i -selection clipboard -target image/png"
+CLIPBOARD_TXT_CMD="$(which xclip) -sel c"
+WIN_CMD="$(which xdotool)"
+DISPLAY_CMD="$(which eog)"
+BARCODE_SCAN_CMD="$(which zbarimg) --raw -q"
+OCR_CMD="$(which tesseract)"
 
 param=""
 what="$1"
