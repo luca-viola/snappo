@@ -20,7 +20,9 @@ function snapshot()
 
 case "$what" in
    window)
-     ${WIN_CMD} windowactivate $(${WIN_CMD} selectwindow)
+     if [ "$XDG_SESSION_TYPE" == "x11" ]; then
+       ${WIN_CMD} windowactivate $(${WIN_CMD} selectwindow)
+     fi
      snapshot "w"
      ;;
    area)
@@ -36,6 +38,7 @@ case "$what" in
       ${CLIPBOARD_CMD} < ${TARGET_FILE}
       ;;
     clear)
+      echo "" | $CLIPBOARD_TXT_CMD
       rm ${TARGET_FILE}
       ;;
    ocr)

@@ -36,21 +36,22 @@ class ClipBoardManager:
         self.image_display.set_image(thumb)
 
     def copy_image(self):
+        thumb = gtk.Image.new_from_icon_name(gi.repository.Gtk.STOCK_PRINT_PREVIEW, gi.repository.Gtk.IconSize.DIALOG)
         img_data = self.clipboard.wait_for_image()
         if img_data is not None:
             thumb = gtk.Image()
             thumb.set_from_pixbuf(img_data)
-            return thumb
+        return thumb
 
     def set_image_display(self, clipboard_item):
         self.image_display = clipboard_item
 
 
 class ScreenGrabber:
-    image_display = None
     clipboard_manager = None
 
     def __init__(self,cliboard_manager):
+        self.image_display = None
         self.clipboard_manager = cliboard_manager
         notify.init(APPINDICATOR_ID)
 
