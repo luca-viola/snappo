@@ -11,11 +11,17 @@ OCR_CMD="/usr/bin/tesseract"
 
 param=""
 what="$1"
+delay="$2"
 
 function snapshot()
 {
   local param="$1"
-  ${SCREENSHOT_CMD} -c${param}f ${TARGET_FILE} && cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
+  local delay="$2"
+  if [ "$param" == "d" ]; then
+    param=""
+  fi
+  delay_opt="--delay=${delay}"
+  ${SCREENSHOT_CMD} ${delay_opt} -c${param}f ${TARGET_FILE} && cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
 }
 
 case "$what" in
@@ -23,19 +29,27 @@ case "$what" in
      if [ "$XDG_SESSION_TYPE" == "x11" ]; then
        ${WIN_CMD} windowactivate $(${WIN_CMD} selectwindow)
      fi
-     snapshot "w"
+     snapshot "w" "$delay"
      ;;
    area)
-     snapshot "a"
+     snapshot "a" "$delay"
      ;;
    desktop)
-     snapshot
+     snapshot "d" "$delay"
      ;;
    display)
-     ${DISPLAY_CMD} ${TARGET_FILE}
+     if [ -f "${TARGET_FILE}" ]; then
+       ${DISPLAY_CMD} ${TARGET_FILE}
+     else
+       exit 1
+     fi
      ;;
    copy)
-      ${CLIPBOARD_CMD} < ${TARGET_FILE}
+      if [ -f "${TARGET_FILE}" ]; then
+        ${CLIPBOARD_CMD} < ${TARGET_FILE}
+      else
+        exit 1
+      fi
       ;;
     clear)
       echo "" | $CLIPBOARD_TXT_CMD
