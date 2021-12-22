@@ -1,6 +1,7 @@
 #!/bin/env python3
 import os
 import signal
+import time
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -26,7 +27,10 @@ class ClipBoardManager:
         self.clipboard = gtk.Clipboard.get(gdk.SELECTION_CLIPBOARD)
 
     def copy(self, widget):
-        os.system(BASH_PATH+" copy")
+        ret = os.system(BASH_PATH+" copy")
+        if ret != 0:
+          notify.Notification.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
+
 
     def clear(self, widget):
         self.clipboard.clear()
@@ -37,10 +41,10 @@ class ClipBoardManager:
 
     def copy_image(self):
         thumb = gtk.Image.new_from_icon_name(gi.repository.Gtk.STOCK_PRINT_PREVIEW, gi.repository.Gtk.IconSize.DIALOG)
-        img_data = self.clipboard.wait_for_image()
-        if img_data is not None:
-            thumb = gtk.Image()
-            thumb.set_from_pixbuf(img_data)
+        # img_data = self.clipboard.wait_for_image()
+        # if img_data is not None:
+        #     thumb = gtk.Image()
+        #     thumb.set_from_pixbuf(img_data)
         return thumb
 
     def set_image_display(self, clipboard_item):
@@ -55,9 +59,9 @@ class ScreenGrabber:
         self.clipboard_manager = cliboard_manager
         notify.init(APPINDICATOR_ID)
 
-    def grab(self, what):
+    def grab(self, what, delay):
         if what in ['area', 'desktop', 'window']:
-            os.system(BASH_PATH + " " + what)
+            os.system(BASH_PATH + " " + what + " "+ str(int(delay)))
             thumb = clipboard_manager.copy_image()
             self.image_display.set_image(thumb)
 
@@ -76,6 +80,7 @@ class Snappo:
     screen_grabber = None
     clipboard_manager = None
     menu = None
+    delay = 0
 
     def __init__(self, screen_grabber, clipboard_manager):
         self.screen_grabber = screen_grabber
@@ -111,6 +116,8 @@ class Snappo:
         self._add_menu_item('Grab Window..', self._grab_window)
         self._add_menu_item('Grab Area..', self._grab_area)
         self.menu.append(gtk.SeparatorMenuItem())
+        self.delay_widget=self._add_menu_item('Set delay..', self.show_slider)
+        self.menu.append(gtk.SeparatorMenuItem())
         clipboard_item = self._add_menu_item_with_icon('Clipboard', gi.repository.Gtk.STOCK_MISSING_IMAGE, self.show_thumb)
         self.screen_grabber.set_image_display(clipboard_item)
         self.clipboard_manager.set_image_display(clipboard_item)
@@ -122,13 +129,41 @@ class Snappo:
         self._add_menu_item('Quit', self.quit)
 
     def show_thumb(self, widget):
-        os.system(BASH_PATH + " display")
+        ret = os.system(BASH_PATH + " display")
+        if ret != 0:
+          notify.Notification.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
 
-    def _grab_desktop(self, widget): self.screen_grabber.grab('desktop')
-    def _grab_window(self, widget): self.screen_grabber.grab('window')
-    def _grab_area(self, widget): self.screen_grabber.grab('area')
+    def _set_delay(self, widget):
+        self.delay = widget.get_value()
+        label="Set Delay..."
+        if self.delay>0:
+          label=label+" ("+str(int(self.delay))+"s)"
+        self.delay_widget.set_label(label)
+
+    def show_slider(self, widget):
+        msg = "Set screenshot delay in seconds:"
+        title = "Set Delay"
+        dialog = gtk.MessageDialog( None, gtk.DialogFlags.MODAL, gtk.MessageType.QUESTION, gtk.ButtonsType.OK,  msg)
+        dialog.set_title(title)
+        box = dialog.get_message_area()
+        scale = gtk.Scale().new(gtk.Orientation.HORIZONTAL)
+        scale.set_range(0, 100)
+        scale.set_digits(0)
+        scale.set_value(self.delay)
+        scale.connect("value-changed", self._set_delay)
+        scale.set_size_request(128, 24)
+        box.pack_end(scale, False, False, 0)
+        box.show_all()
+        dialog.show()
+        dialog.run()
+        dialog.destroy()
+
+    def _grab_desktop(self, widget): self.screen_grabber.grab('desktop',self.delay)
+    def _grab_window(self, widget): self.screen_grabber.grab('window', self.delay)
+    def _grab_area(self, widget): self.screen_grabber.grab('area', self.delay)
 
     def quit(self, widget):
+        os.system(BASH_PATH+" clear")
         notify.uninit()
         gtk.main_quit()
 
