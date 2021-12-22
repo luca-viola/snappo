@@ -61,12 +61,12 @@ From this you can show the popup menu with some options:
   This menu shows a 🚫 symbol when the clipboard is empty, and a 🔍 when it contains a snapshot image. By selecting it 
   the content will be shown in the image viewer.
 * **Copy** ⎘  
-  This menu lets you reinsert the snaphot image in the clipboard, in case it was accidentally lost.
+  This menu lets you reinsert the snapshot image in the clipboard, in case it was accidentally lost.
 * **Clear** ⌫  
-  This menu lets you erase the snaphost image from the clipboard and the persisted temporary file.
+  This menu lets you erase the snapshot image from the clipboard and the persisted temporary file.
 * **OCR**  
   By selecting this, Snappo will perform a barcode detection on the snapped image, decode it and put the resulting text
-  in the clipboard. If the barcode detection is unsuccessfull, an optical character recognition will be performed, and 
+  in the clipboard. If the barcode detection is unsuccessful, an optical character recognition will be performed, and 
   the resulting text copied in the clipboard. The barcodes recognized are the ones supported by the zbar package, and 
   the OCR is performed by the open source package tesseract.
 * **Quit**  
