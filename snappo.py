@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 APPINDICATOR_ID = 'Snappo'
 BASH_FILE = "snappo.sh"
-BASH_PATH = os.path.abspath(BASH_FILE)
+
 
 class ClipBoardManager:
     clipboard = None
@@ -167,6 +167,11 @@ class Snappo:
         notify.uninit()
         gtk.main_quit()
 
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+BASH_PATH = os.path.abspath(BASH_FILE)
 
 clipboard_manager = ClipBoardManager()
 screen_grabber = ScreenGrabber(clipboard_manager)
