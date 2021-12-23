@@ -42,7 +42,7 @@ In case of problems, more information about the installation of the python Gtk O
 ### Usage
 <img src="docs/snappo_menu.png" alt="Main Menu" style="width:200px;"/>
 <img src="docs/snappo_timer.png" alt="Delay slider" style="width:200px;"/>  
-<img src="docs/snappo_about.png" alt="Delay slider" style="width:200px;"/>  
+<img src="docs/snappo_about.png" alt="About dialog" style="width:200px;"/>  
 
 The usage is pretty straightforward. When started, an icon with a camera will appear in the gnome top menu bar.
 From this you can show the popup menu with some options:
