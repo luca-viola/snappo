@@ -106,11 +106,12 @@ class Snappo(SnappoAbstract):
         self.delay_widget.set_label(label)
 
     def show_about_dialog(self, widget):
+
         about = gtk.AboutDialog()
         about.set_title("About..")
         about.set_name("SNapshot APPlicatiOn")
         about.set_program_name("Snappo")
-        about.set_version("V 0.1")
+        about.set_version("Ver: "+self.version)
         about.set_authors(["Luca Viola"])
         about.set_copyright("© 2021 by Luca Viola")
         about.set_comments("A Screen Snapshot tool with OCR\nand Barcode recognition capabilities")
