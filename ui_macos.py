@@ -115,7 +115,7 @@ class Snappo(SnappoAbstract):
         self.delay_label_menu_item = self._add_menu_item(label="Set Delay..", callback=self.show_delay_dialog)
         self.delay_menu_item = self._add_direct_menu_item(rumps.SliderMenuItem(value=0, dimensions=(180,25), callback=self._set_delay))
         self._add_direct_menu_item(rumps.separator)
-        self.clipboard_menu_item = self._add_menu_item_with_icon(label="Clibpoard..", callback=self.show_thumb, icon_id=ImageResolver().get_noimg_icon())
+        self.clipboard_menu_item = self._add_menu_item_with_icon(label="Clibpoard..", callback=self.screen_grabber.display, icon_id=ImageResolver().get_noimg_icon())
         self.image_changing_notifier.set_image_changing_notifier(self.clipboard_menu_item)
         self.copy_menu_item = self._add_menu_item_with_icon(label="Copy..", callback=self.clipboard_manager.copy, icon_id=ImageResolver().get_copy_icon())
         self.clear_menu_item = self._add_menu_item_with_icon(label="Clear..", callback=self.clipboard_manager.clear, icon_id=ImageResolver().get_clear_icon())
@@ -157,9 +157,6 @@ class Snappo(SnappoAbstract):
 
     def _grab_area(self, sender):
         self._grab("area", self.delay)
-
-    def show_thumb(self, sender):
-        self.screen_grabber.display()
 
     def show_about_dialog(self, widget):
         press = Alert("Snappo", "A Screenshot tool with Barcode/OCR capabilites\n\nVer: "+self.version+"\n\n© 2021 by Luca Viola\n\nSnappo on github: https://github.com/luca-viola/snappo\nLicense: GPL V3 - http://www.gnu.org/licenses/").show()

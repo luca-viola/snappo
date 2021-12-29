@@ -66,10 +66,6 @@ class SnappoAbstract(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def show_thumb(self, widget):
-        pass
-
-    @abstractmethod
     def _set_delay(self, widget):
         pass
 

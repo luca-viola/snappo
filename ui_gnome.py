@@ -52,13 +52,14 @@ class Snappo(SnappoAbstract):
         self.BASH_FILE = "linux/snappo.sh"
         super().__init__(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
 
-        indicator = appindicator.Indicator.new(self.APPINDICATOR_ID, os.path.abspath('linux/camera.svg'),
+        indicator = appindicator.Indicator.new(self.APP_INDICATOR, os.path.abspath('linux/camera.svg'),
                                                appindicator.IndicatorCategory.SYSTEM_SERVICES)
         indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.menu = gtk.Menu()
         indicator.set_menu(self.menu)
         self._build_menu()
         self.menu.show_all()
+        self.run()
 
     def run(self):
         gtk.main()
@@ -86,10 +87,8 @@ class Snappo(SnappoAbstract):
         self.menu.append(gtk.SeparatorMenuItem())
         self.delay_widget=self._add_menu_item('Set delay..', self.show_delay_dialog)
         self.menu.append(gtk.SeparatorMenuItem())
-        clipboard_item = self._add_menu_item_with_icon('Clipboard', gi.repository.Gtk.STOCK_MISSING_IMAGE, self.screen_grabber.display())
-        self.image_changing_notifier.set_image_changing_notifier(self.clipboard_item)
-        self.screen_grabber.set_image_display(clipboard_item)
-        self.clipboard_manager.set_image_display(clipboard_item)
+        clipboard_item = self._add_menu_item_with_icon('Clipboard', gi.repository.Gtk.STOCK_MISSING_IMAGE, self.screen_grabber.display)
+        self.image_changing_notifier.set_image_changing_notifier(clipboard_item)
         self._add_menu_item_with_icon('Copy', gi.repository.Gtk.STOCK_COPY, self.clipboard_manager.copy)
         self._add_menu_item_with_icon('Clear', gi.repository.Gtk.STOCK_CLEAR, self.clipboard_manager.clear)
         self.menu.append(gtk.SeparatorMenuItem())
@@ -97,6 +96,7 @@ class Snappo(SnappoAbstract):
         self.menu.append(gtk.SeparatorMenuItem())
         self._add_menu_item('About..', self.show_about_dialog)
         self._add_menu_item('Quit', self.quit)
+
 
     def _set_delay(self, widget):
         self.delay = widget.get_value()
@@ -117,7 +117,7 @@ class Snappo(SnappoAbstract):
         about.set_comments("A Screen Snapshot tool with OCR\nand Barcode recognition capabilities")
         about.set_website("https://github.com/luca-viola/snappo")
         about.set_website_label("Snappo on Github")
-        about.set_logo(gi.repository.GdkPixbuf.Pixbuf.new_from_file_at_size("camera.svg", 64, 64))
+        about.set_logo(gi.repository.GdkPixbuf.Pixbuf.new_from_file_at_size("linux/camera.svg", 64, 64))
         about.set_license_type(gtk.License.GPL_3_0)
         about.set_wrap_license(True)
         about.set_license("""
@@ -140,6 +140,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         """)
         about.run()
         about.destroy()
+
+    def show_delay_dialog(self, widget):
+        msg = "Set screenshot delay in seconds:"
+        title = "Set Delay"
+        dialog = gtk.MessageDialog( None, gtk.DialogFlags.MODAL, gtk.MessageType.QUESTION, gtk.ButtonsType.OK,  msg)
+        dialog.set_title(title)
+        box = dialog.get_message_area()
+        scale = gtk.Scale().new(gtk.Orientation.HORIZONTAL)
+        scale.set_range(0, 100)
+        scale.set_digits(0)
+        scale.set_value(self.delay)
+        scale.connect("value-changed", self._set_delay)
+        scale.set_size_request(128, 24)
+        box.pack_end(scale, False, False, 0)
+        box.show_all()
+        dialog.show()
+        dialog.run()
+        dialog.destroy()
 
     def _grab_desktop(self, widget): self.screen_grabber.grab('desktop',self.delay)
     def _grab_window(self, widget): self.screen_grabber.grab('window', self.delay)
