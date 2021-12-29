@@ -49,8 +49,9 @@ class SnappoAbstract(metaclass=ABCMeta):
         self.notification_manager = notification_manager
         self.image_resolver = image_resolver
         self.image_changing_notifier = image_changing_notifier
-        self.BASH_PATH = os.path.dirname(os.path.abspath(__file__)) + "/" + self.BASH_FILE
-        with open('VERSION') as f: self.version = f.read()
+        self.script_dir=os.path.dirname(os.path.abspath(__file__))
+        self.BASH_PATH = self.script_dir + "/" + self.BASH_FILE
+        with open(os.path.dirname(os.path.abspath(__file__))+'/VERSION') as f: self.version = f.read()
         f.close()
 
     @abstractmethod

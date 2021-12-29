@@ -52,7 +52,7 @@ class Snappo(SnappoAbstract):
         self.BASH_FILE = "linux/snappo.sh"
         super().__init__(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
 
-        indicator = appindicator.Indicator.new(self.APP_INDICATOR, os.path.abspath('linux/camera.svg'),
+        indicator = appindicator.Indicator.new(self.APP_INDICATOR, self.script_dir+'/camera.svg',
                                                appindicator.IndicatorCategory.SYSTEM_SERVICES)
         indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.menu = gtk.Menu()
@@ -117,7 +117,8 @@ class Snappo(SnappoAbstract):
         about.set_comments("A Screen Snapshot tool with OCR\nand Barcode recognition capabilities")
         about.set_website("https://github.com/luca-viola/snappo")
         about.set_website_label("Snappo on Github")
-        about.set_logo(gi.repository.GdkPixbuf.Pixbuf.new_from_file_at_size("linux/camera.svg", 64, 64))
+        about.set_logo(gi.repository.GdkPixbuf.Pixbuf.new_from_file_at_size(self.script_dir+"/camera.svg", 64, 64))
+        print(self.script_dir+"/camera.svg")
         about.set_license_type(gtk.License.GPL_3_0)
         about.set_wrap_license(True)
         about.set_license("""
@@ -159,9 +160,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         dialog.run()
         dialog.destroy()
 
-    def _grab_desktop(self, widget): self.screen_grabber.grab('desktop',self.delay)
-    def _grab_window(self, widget): self.screen_grabber.grab('window', self.delay)
-    def _grab_area(self, widget): self.screen_grabber.grab('area', self.delay)
+    def _grab_desktop(self, widget): self.screen_grabber.grab('desktop',int(self.delay))
+    def _grab_window(self, widget): self.screen_grabber.grab('window', int(self.delay))
+    def _grab_area(self, widget): self.screen_grabber.grab('area', int(self.delay))
 
     def quit(self, widget):
         os.system(self.BASH_PATH+" clear")
