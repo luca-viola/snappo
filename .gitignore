@@ -1,2 +1,5 @@
 .idea/
 snappo.iml
+/macos/build/
+/macos/dist/
+
