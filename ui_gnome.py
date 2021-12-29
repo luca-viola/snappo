@@ -179,9 +179,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     def _grab_area(self, widget): self.screen_grabber.grab('area', int(self.delay))
 
     def get_monitors(self):
-        result = subprocess.run(['xrandr | grep -i connected | awk \'{ print $3 $4}\''],
+        result = subprocess.run(['xrandr | grep -i " connected" | awk \'{ print $3 $4}\''],
                                 shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip().split('\n')
         for i in range(len(result)):
+            result[i] = result[i].replace("right", "")
+            result[i] = result[i].replace("left", "")
             result[i] = result[i].replace("(normal", "")
             result[i] = result[i].replace("primary", "*")
         return result
