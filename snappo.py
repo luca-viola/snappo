@@ -2,12 +2,11 @@
 import signal
 import platform
 
-import rumps
-
 from ui_abstract import *
 
 whatos = platform.system()
 if whatos == 'Darwin':
+    import rumps
     from ui_macos import Snappo, ImageResolver, Notification
     #rumps.debug_mode(True)
     BASH_FILE="macos/snappo.sh"
@@ -82,7 +81,7 @@ class ScreenGrabber:
         else:
             self.notification_manager.new("OCR Error.", "The clipboard seems empty, grab an image first.").show()
 
-    def display(self):
+    def display(self,widget):
         ret = os.system(self.BASH_PATH + " display")
         if ret != 0:
             self.notification_manager.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
