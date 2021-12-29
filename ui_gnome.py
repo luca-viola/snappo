@@ -1,6 +1,6 @@
 #!/bin/env python3
 import os
-
+import subprocess
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
@@ -31,6 +31,9 @@ class ImageResolver(ImageResolverAbstract):
     def get_clear_icon(self):
         return self.resolve(gi.repository.Gtk.STOCK_CLEAR)
 
+    def get_convert_icon(self):
+        return self.resolve(gi.repository.Gtk.STOCK_CONVERT)
+
 
 class Notification(NotificationAbstract):
     def __init__(self):
@@ -52,17 +55,17 @@ class Snappo(SnappoAbstract):
         self.BASH_FILE = "linux/snappo.sh"
         super().__init__(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
 
-        indicator = appindicator.Indicator.new(self.APP_INDICATOR, self.script_dir+'/camera.svg',
+        self.indicator = appindicator.Indicator.new(self.APP_INDICATOR, self.script_dir+'/camera.svg',
                                                appindicator.IndicatorCategory.SYSTEM_SERVICES)
-        indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.menu = gtk.Menu()
-        indicator.set_menu(self.menu)
+        self.indicator.set_menu(self.menu)
         self._build_menu()
         self.menu.show_all()
-        self.run()
+        gtk.main()
 
     def run(self):
-        gtk.main()
+        pass
 
     def _add_menu_item(self, label, callback):
         menu_item = gtk.MenuItem.new_with_label(label)
@@ -82,6 +85,12 @@ class Snappo(SnappoAbstract):
 
     def _build_menu(self):
         self._add_menu_item('Grab Desktop..', self._grab_desktop)
+        self.monitors = self.get_monitors()
+        _entries = []
+        if(len(self.monitors))>1:
+            for i in range(0, len(self.monitors)):
+                self._add_menu_item(label="  "+str(i+1)+"  "+self.monitors[i], callback=self._grab_desktop)
+
         self._add_menu_item('Grab Window..', self._grab_window)
         self._add_menu_item('Grab Area..', self._grab_area)
         self.menu.append(gtk.SeparatorMenuItem())
@@ -160,9 +169,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         dialog.run()
         dialog.destroy()
 
-    def _grab_desktop(self, widget): self.screen_grabber.grab('desktop',int(self.delay))
+    def _grab_desktop(self, widget):
+        which_desktop=widget.get_label().strip().split()[1]
+        if which_desktop[0]=='*':
+            which_desktop=which_desktop[1:]
+        self.screen_grabber.grab("desktop", self.delay, " " if which_desktop == 'Desktop..' else which_desktop)
+
     def _grab_window(self, widget): self.screen_grabber.grab('window', int(self.delay))
     def _grab_area(self, widget): self.screen_grabber.grab('area', int(self.delay))
+
+    def get_monitors(self):
+        result = subprocess.run(['xrandr | grep -i connected | awk \'{ print $3 $4}\''],
+                                shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip().split('\n')
+        for i in range(len(result)):
+            result[i] = result[i].replace("(normal", "")
+            result[i] = result[i].replace("primary", "*")
+        return result
 
     def quit(self, widget):
         os.system(self.BASH_PATH+" clear")

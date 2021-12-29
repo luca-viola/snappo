@@ -73,6 +73,7 @@ class ScreenGrabber:
             os.system(self.BASH_PATH + " " + what + " " + str(delay) + " " + which_desktop)
             thumb = self.image_resolver.get_lens_icon()
             self.image_changing_notifier.set_icon(thumb)
+            self.notification_manager.new("Grab complete.", "The snapshot is in the clipboard.").show()
 
     def ocr(self, widget):
         ret = os.system(self.BASH_PATH + " ocr")
@@ -88,7 +89,7 @@ class ScreenGrabber:
 
 
 def main():
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    #signal.signal(signal.SIGINT, signal.SIG_DFL)
     notification_manager = Notification()
     image_resolver = ImageResolver()
     image_changing_notifier = ImageChangingNotifier()

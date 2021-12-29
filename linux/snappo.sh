@@ -12,16 +12,25 @@ OCR_CMD="$(which tesseract)"
 param=""
 what="$1"
 delay="$2"
+desktop="$3"
 
 function snapshot()
 {
   local param="$1"
   local delay="$2"
+  local desktop="$3"
   if [ "$param" == "d" ]; then
     param=""
   fi
   delay_opt="--delay=${delay}"
-  ${SCREENSHOT_CMD} ${delay_opt} -c${param}f ${TARGET_FILE} && cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
+  if [ "$desktop" != "" ]; then
+    ${SCREENSHOT_CMD} ${delay_opt} -f ${TARGET_FILE}_all
+    convert /tmp/snappo_all -crop $desktop /tmp/snappo
+    cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
+  else
+    ${SCREENSHOT_CMD} ${delay_opt} -c${param}f ${TARGET_FILE} && cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
+  fi
+
 }
 
 case "$what" in
@@ -29,13 +38,13 @@ case "$what" in
      if [ "$XDG_SESSION_TYPE" == "x11" ]; then
        ${WIN_CMD} windowactivate $(${WIN_CMD} selectwindow)
      fi
-     snapshot "w" "$delay"
+     snapshot "w" "$delay" "$desktop"
      ;;
    area)
-     snapshot "a" "$delay"
+     snapshot "a" "$delay" "$desktop"
      ;;
    desktop)
-     snapshot "d" "$delay"
+     snapshot "d" "$delay" "$desktop"
      ;;
    display)
      if [ -f "${TARGET_FILE}" ]; then
