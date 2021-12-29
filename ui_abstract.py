@@ -51,6 +51,7 @@ class SnappoAbstract(metaclass=ABCMeta):
         self.image_changing_notifier = image_changing_notifier
         self.BASH_PATH = os.path.dirname(os.path.abspath(__file__)) + "/" + self.BASH_FILE
         with open('VERSION') as f: self.version = f.read()
+        f.close()
 
     @abstractmethod
     def _add_menu_item(self, label, callback):
