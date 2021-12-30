@@ -76,9 +76,9 @@ class Alert(object):
 
 
 class Snappo(SnappoAbstract):
-    def __init__(self, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
+    def __init__(self, version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
         self.BASH_FILE = "macos/snappo.sh"
-        super().__init__(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
+        super().__init__(version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
 
         self.delay = 0
         self.items=[]

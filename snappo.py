@@ -4,8 +4,8 @@ import platform
 
 from ui_abstract import *
 
-whatos = platform.system()
-if whatos == 'Darwin':
+PLATFORM_OS = platform.system()
+if PLATFORM_OS == 'Darwin':
     import rumps
     from ui_macos import Snappo, ImageResolver, Notification
     #rumps.debug_mode(True)
@@ -73,7 +73,8 @@ class ScreenGrabber:
             os.system(self.BASH_PATH + " " + what + " " + str(delay) + " " + which_desktop)
             thumb = self.image_resolver.get_lens_icon()
             self.image_changing_notifier.set_icon(thumb)
-            self.notification_manager.new("Grab complete.", "The snapshot is in the clipboard.").show()
+            if PLATFORM_OS != 'Darwin':
+                self.notification_manager.new("Grab complete.", "The snapshot is in the clipboard.").show()
 
     def ocr(self, widget):
         ret = os.system(self.BASH_PATH + " ocr")
@@ -88,7 +89,7 @@ class ScreenGrabber:
             self.notification_manager.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
 
 
-def main():
+def main(version):
     #signal.signal(signal.SIGINT, signal.SIG_DFL)
     notification_manager = Notification()
     image_resolver = ImageResolver()
@@ -96,9 +97,13 @@ def main():
 
     clipboard_manager = ClipBoardManager(notification_manager, image_resolver, image_changing_notifier)
     screen_grabber = ScreenGrabber(notification_manager, image_resolver, image_changing_notifier)
-    app = Snappo(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
+    app = Snappo(version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
     app.run()
 
 
 if __name__ == '__main__':
-    main()
+    version = ""
+    with open(os.path.dirname(__file__)+'/VERSION', 'r') as f:
+        version=f.read()
+    f.close()
+    main(version)

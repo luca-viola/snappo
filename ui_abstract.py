@@ -1,3 +1,4 @@
+import subprocess
 from abc import ABCMeta, abstractmethod
 import os
 
@@ -42,7 +43,7 @@ class SnappoAbstract(metaclass=ABCMeta):
     clipboard_manager = None
     screen_grabber = None
 
-    def __init__(self, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
+    def __init__(self, version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
         self.APP_INDICATOR = APP_INDICATOR
         self.clipboard_manager = clipboard_manager
         self.screen_grabber = screen_grabber
@@ -51,8 +52,7 @@ class SnappoAbstract(metaclass=ABCMeta):
         self.image_changing_notifier = image_changing_notifier
         self.script_dir=os.path.dirname(os.path.abspath(__file__))
         self.BASH_PATH = self.script_dir + "/" + self.BASH_FILE
-        with open(os.path.dirname(os.path.abspath(__file__))+'/VERSION') as f: self.version = f.read()
-        f.close()
+        self.version = version
 
     @abstractmethod
     def _add_menu_item(self, label, callback):

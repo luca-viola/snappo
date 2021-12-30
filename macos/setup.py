@@ -1,15 +1,15 @@
 from setuptools import setup
 
-APP = ['snappo.py']
+APP = ['../snappo.py']
 #DATA_FILES = ['imgtocb.py','snappo.sh','./images/noimg_red.png','./images/clear.png','./images/lens.png','./images/copy.png']
-DATA_FILES = ['imgtocb.py','snappo.sh','images']
+DATA_FILES = ['../VERSION', '../ui_abstract.py', '../ui_macos.py', ('macos', ['imgtocb.py', 'snappo.sh', 'images'])]
 OPTIONS = {
     'iconfile':'snappo.icns',    
     'argv_emulation': True,
     'plist': {
         'LSUIElement': True,
     },
-    'packages': ['rumps','objc','os','subprocess','Cocoa','AppKit','Foundation'],
+    'packages': ['rumps', 'objc', 'os', 'subprocess', 'Cocoa', 'AppKit', 'Foundation'],
 }
 
 setup(
