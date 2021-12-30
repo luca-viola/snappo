@@ -51,9 +51,9 @@ class Notification(NotificationAbstract):
 
 class Snappo(SnappoAbstract):
 
-    def __init__(self, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
+    def __init__(self, version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier):
         self.BASH_FILE = "linux/snappo.sh"
-        super().__init__(screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
+        super().__init__(version, screen_grabber, clipboard_manager, notification_manager, image_resolver, image_changing_notifier)
 
         self.indicator = appindicator.Indicator.new(self.APP_INDICATOR, self.script_dir+'/camera.svg',
                                                appindicator.IndicatorCategory.SYSTEM_SERVICES)
