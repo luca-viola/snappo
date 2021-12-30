@@ -40,9 +40,29 @@ In case of problems, more information about the installation of the python Gtk O
 (Coming soon)
 
 ### Usage
-<img src="docs/snappo_menu.png" alt="Main Menu" style="width:200px;"/>
-<img src="docs/snappo_timer.png" alt="Delay slider" style="width:200px;"/>  
-<img src="docs/snappo_about.png" alt="About dialog" style="width:200px;"/>  
+
+#### Gnome Screenshots
+<table>
+  <tr>
+    <td><img src="docs/snappo_menu_gnome.png" alt="Main Menu" style="width:400px;"/></td>
+    <td>
+      <img src="docs/snappo_timer_gnome.png" alt="Delay slider" style="width:200px;"/>
+      <img src="docs/snappo_about_gnome.png" alt="About dialog" style="width:200px;"/>
+      <img src="docs/snappo_notification_gnome.png" alt="About dialog" style="width:200px;"/>
+    </td>  
+  </tr>
+</table>
+
+#### MacOS Screenshots
+<table>
+  <tr>
+    <td><img src="docs/snappo_menu_macos.png" alt="Main Menu" style="width:300px;"/></td>
+    <td>
+      <img src="docs/snappo_about_macos.png" alt="About dialog" style="width:200px;"/>
+      <img src="docs/snappo_notification_macos.png" alt="About dialog" style="width:200px;"/>
+    </td>  
+  </tr>
+</table>
 
 The usage is pretty straightforward. When started, an icon with a camera will appear in the gnome top menu bar.
 From this you can show the popup menu with some options:
