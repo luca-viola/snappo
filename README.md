@@ -51,6 +51,11 @@ In case of problems, more information about the installation of the python Gtk O
       <img src="docs/snappo_notification_gnome.png" alt="About dialog" style="width:200px;"/>
     </td>  
   </tr>
+  <tr>
+     <td colspan="2">
+       [![Watch the video](https://i.imgur.com/vKb2F1B.png)](docs/gnome_record.mp4)
+     </td>
+  </tr>
 </table>
 
 #### MacOS Screenshots
