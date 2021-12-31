@@ -1,4 +1,6 @@
 #!/bin/env bash
+DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+cd ${DIR}
 
 TARGET_FILE="/tmp/snappo"
 SCREENSHOT_CMD="$(which gnome-screenshot)"
@@ -25,7 +27,7 @@ function snapshot()
   delay_opt="--delay=${delay}"
   if [ "$desktop" != "" ]; then
     ${SCREENSHOT_CMD} ${delay_opt} -f ${TARGET_FILE}_all
-    convert /tmp/snappo_all -crop $desktop /tmp/snappo
+    ${DIR}/imgcrop -i "/tmp/snappo_all" -g "$desktop" /tmp/snappo
     cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
   else
     ${SCREENSHOT_CMD} ${delay_opt} -c${param}f ${TARGET_FILE} && cat ${TARGET_FILE} | ${CLIPBOARD_CMD}
