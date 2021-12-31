@@ -44,11 +44,13 @@ In case of problems, more information about the installation of the python Gtk O
 #### Gnome Screenshots
 <table>
   <tr>
-    <td><img src="docs/snappo_menu_gnome.png" alt="Main Menu" style="width:400px;"/></td>
-    <td>
-      <img src="docs/snappo_timer_gnome.png" alt="Delay slider" style="width:200px;"/>
-      <img src="docs/snappo_about_gnome.png" alt="About dialog" style="width:200px;"/>
-      <img src="docs/snappo_notification_gnome.png" alt="About dialog" style="width:200px;"/>
+    <td><img src="docs/snappo_menu_gnome.png" alt="Main Menu" style="width:300px;"/></td>
+    <td valign="top">
+      <img src="docs/snappo_timer_gnome.png" alt="Delay slider" style="width:400px;"/><br />
+      <br />
+      <img src="docs/snappo_about_gnome.png" alt="About dialog" style="width:400px;"/><br />
+      <br />
+      <img src="docs/snappo_notification_gnome.png" alt="About dialog" style="width:400px;"/>
     </td>  
   </tr>
 </table>
@@ -57,9 +59,10 @@ In case of problems, more information about the installation of the python Gtk O
 <table>
   <tr>
     <td><img src="docs/snappo_menu_macos.png" alt="Main Menu" style="width:300px;"/></td>
-    <td>
-      <img src="docs/snappo_about_macos.png" alt="About dialog" style="width:200px;"/>
-      <img src="docs/snappo_notification_macos.png" alt="About dialog" style="width:200px;"/>
+    <td valign="top">
+      <img src="docs/snappo_about_macos.png" alt="About dialog" style="width:400px;"/><br />
+      <br />
+      <img src="docs/snappo_notification_macos.png" alt="About dialog" style="width:400px;"/>
     </td>  
   </tr>
 </table>
@@ -83,7 +86,7 @@ From this you can show the popup menu with some options:
   the content will be shown in the image viewer.
 * **Copy** ⎘  
   This menu lets you reinsert the snapshot image in the clipboard, in case it was accidentally lost.
-* **Save As..** ⎘  
+* **Save As..** 💾 
   (Gnome only) This menu lets you save the snapped content in a chosen file.
 * **Clear** ⌫  
   This menu lets you erase the snapshot image from the clipboard and the persisted temporary file.
