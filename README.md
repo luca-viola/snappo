@@ -86,7 +86,7 @@ From this you can show the popup menu with some options:
   the content will be shown in the image viewer.
 * **Copy** ⎘  
   This menu lets you reinsert the snapshot image in the clipboard, in case it was accidentally lost.
-* **Save As..** 💾 
+* **Save As..** 💾  
   (Gnome only) This menu lets you save the snapped content in a chosen file.
 * **Clear** ⌫  
   This menu lets you erase the snapshot image from the clipboard and the persisted temporary file.
