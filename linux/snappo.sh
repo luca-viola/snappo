@@ -62,6 +62,16 @@ case "$what" in
         exit 1
       fi
       ;;
+   copyto)
+     if [ -f "${TARGET_FILE}" ]; then
+       cp "${TARGET_FILE}" "$2"
+       if [ $? -gt 0 ]; then
+         exit 2
+       fi
+     else
+       exit 1
+     fi
+     ;;
     clear)
       echo "" | $CLIPBOARD_TXT_CMD
       rm ${TARGET_FILE}

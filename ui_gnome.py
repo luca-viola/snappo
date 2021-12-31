@@ -1,5 +1,6 @@
 #!/bin/env python3
 import os
+import shutil
 import subprocess
 import gi
 gi.require_version('Gtk', '3.0')
@@ -99,6 +100,7 @@ class Snappo(SnappoAbstract):
         clipboard_item = self._add_menu_item_with_icon('Clipboard', gi.repository.Gtk.STOCK_MISSING_IMAGE, self.screen_grabber.display)
         self.image_changing_notifier.set_image_changing_notifier(clipboard_item)
         self._add_menu_item_with_icon('Copy', gi.repository.Gtk.STOCK_COPY, self.clipboard_manager.copy)
+        self._add_menu_item_with_icon('Save as..', gi.repository.Gtk.STOCK_SAVE, self.save_as)
         self._add_menu_item_with_icon('Clear', gi.repository.Gtk.STOCK_CLEAR, self.clipboard_manager.clear)
         self.menu.append(gtk.SeparatorMenuItem())
         self._add_menu_item('OCR', self.screen_grabber.ocr)
@@ -188,7 +190,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             result[i] = result[i].replace("primary", "*")
         return result
 
+    def save_as(self, widget):
+        action=gtk.FileChooserAction.SAVE
+        chooser = gtk.FileChooserDialog(title="Save Clipboard as..",
+                                        action=gtk.FileChooserAction.SAVE,
+                                        buttons=(gtk.STOCK_CANCEL,
+                                                 gtk.ResponseType.CANCEL,
+                                                 gtk.STOCK_SAVE,
+                                                 gtk.ResponseType.OK))
+        chooser.set_default_response(gtk.ResponseType.OK)
+        filter = gtk.FileFilter()
+        filter.set_name("All files")
+        filter.add_pattern("*")
+        chooser.add_filter(filter)
+        overwrite = 0
+        if chooser.run() == gtk.ResponseType.OK:
+            filename = chooser.get_filename()
+            if os.path.exists(filename):
+                md = gtk.MessageDialog(chooser,
+                                       gtk.DialogFlags.DESTROY_WITH_PARENT, gtk.MessageType.QUESTION,
+                                       gtk.ButtonsType.YES_NO, "This file exists. Are you sure?")
+                overwrite=md.run()
+                md.destroy()
+                if overwrite == gtk.ResponseType.NO:
+                    return
+        self.save_file(filename)
+        chooser.destroy()
+
+    def save_file(self, filename):
+        self.screen_grabber.copy_to(filename)
+        pass
+
     def quit(self, widget):
-        os.system(self.BASH_PATH+" clear")
-        notify.uninit()
-        gtk.main_quit()
+            os.system(self.BASH_PATH+" clear")
+            notify.uninit()
+            gtk.main_quit()
