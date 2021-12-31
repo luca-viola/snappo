@@ -88,6 +88,12 @@ class ScreenGrabber:
         if ret != 0:
             self.notification_manager.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
 
+    def copy_to(self,filename):
+        ret = os.system(self.BASH_PATH + " copyto \""+filename+"\"")
+        if ret >> 8 == 2:
+            self.notification_manager.new("Save Error.", "The file could not be saved, check permissions.").show()
+        if ret >> 8 == 1:
+            self.notification_manager.new("Clipboard Error.", "The clipboard seems empty, grab an image first.").show()
 
 def main(version):
     #signal.signal(signal.SIGINT, signal.SIG_DFL)
