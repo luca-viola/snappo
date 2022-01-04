@@ -124,7 +124,7 @@ class Snappo(SnappoAbstract):
         about.set_program_name("Snappo")
         about.set_version("Ver: "+self.version)
         about.set_authors(["Luca Viola"])
-        about.set_copyright("© 2021 by Luca Viola")
+        about.set_copyright("© 2022 by Luca Viola")
         about.set_comments("A Screen Snapshot tool with OCR\nand Barcode recognition capabilities")
         about.set_website("https://github.com/luca-viola/snappo")
         about.set_website_label("Snappo on Github")
@@ -135,7 +135,7 @@ class Snappo(SnappoAbstract):
         about.set_license("""
 Snappo
 
-Copyright (C) 2021 Luca Viola
+Copyright (C) 2022 Luca Viola
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
