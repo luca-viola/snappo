@@ -8,7 +8,7 @@ PLATFORM_OS = platform.system()
 if PLATFORM_OS == 'Darwin':
     import rumps
     from ui_macos import Snappo, ImageResolver, Notification
-    #rumps.debug_mode(True)
+    rumps.debug_mode(True)
     BASH_FILE="macos/snappo.sh"
 else:
     from ui_gnome import Snappo, ImageResolver, Notification

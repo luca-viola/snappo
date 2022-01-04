@@ -65,7 +65,7 @@ case "$what" in
      ;;
    copyto)
      if [ -f "${TARGET_FILE}" ]; then
-       echo cp "${TARGET_FILE}" "$2"
+       cp "${TARGET_FILE}" "$2"
        if [ $? -gt 0 ]; then
          exit 2
        fi
