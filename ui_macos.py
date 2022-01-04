@@ -164,7 +164,7 @@ class Snappo(SnappoAbstract):
         self._grab("area", self.delay)
 
     def show_about_dialog(self, widget):
-        press = Alert("Snappo", "A Screenshot tool with Barcode/OCR capabilites\n\nVer: "+self.version+"\n\n© 2021 by Luca Viola\n\nSnappo on github: https://github.com/luca-viola/snappo\nLicense: GPL V3 - http://www.gnu.org/licenses/").show()
+        press = Alert("Snappo", "A Screenshot tool with Barcode/OCR capabilites\n\nVer: "+self.version+"\n\n© 2022 by Luca Viola\n\nSnappo on github: https://github.com/luca-viola/snappo\nLicense: GPL V3 - http://www.gnu.org/licenses/").show()
 
     def show_delay_dialog(self, widget):
         Cocoa.NSBeep()
