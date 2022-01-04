@@ -19,6 +19,7 @@ class ImageResolver(ImageResolverAbstract):
     STOCK_PRINT_PREVIEW = "lens.png"
     STOCK_COPY = "copy.png"
     STOCK_CLEAR = "clear.png"
+    STOCK_SAVE = "save.png"
 
     def __init__(self):
         pass
@@ -38,6 +39,9 @@ class ImageResolver(ImageResolverAbstract):
 
     def get_clear_icon(self):
         return self.resolve(self.STOCK_CLEAR)
+
+    def get_save_icon(self):
+        return self.resolve(self.STOCK_SAVE)
 
 
 class Notification(NotificationAbstract):
@@ -118,6 +122,7 @@ class Snappo(SnappoAbstract):
         self.clipboard_menu_item = self._add_menu_item_with_icon(label="Clibpoard..", callback=self.screen_grabber.display, icon_id=ImageResolver().get_noimg_icon())
         self.image_changing_notifier.set_image_changing_notifier(self.clipboard_menu_item)
         self.copy_menu_item = self._add_menu_item_with_icon(label="Copy..", callback=self.clipboard_manager.copy, icon_id=ImageResolver().get_copy_icon())
+        self.save_as_menu_item = self._add_menu_item_with_icon(label="Save As..", callback=self.save_as, icon_id=ImageResolver().get_save_icon())
         self.clear_menu_item = self._add_menu_item_with_icon(label="Clear..", callback=self.clipboard_manager.clear, icon_id=ImageResolver().get_clear_icon())
         self._add_direct_menu_item(rumps.separator)
         self.ocr_menu_item = self._add_menu_item(label="OCR", callback=self.screen_grabber.ocr)
@@ -163,6 +168,21 @@ class Snappo(SnappoAbstract):
 
     def show_delay_dialog(self, widget):
         Cocoa.NSBeep()
+
+
+    def save_as(self, sender):
+        panel = NSSavePanel.savePanel()
+        panel.setCanCreateDirectories_(True)
+        panel.setRequiredFileType_("png")
+        panel.setAllowsOtherFileTypes_(True)
+        panel.setTreatsFilePackagesAsDirectories_(True)
+        if panel.runModal() == NSOKButton:
+            filename = panel.filename()
+            self.save_file(filename)
+
+    def save_file(self, filename):
+        self.screen_grabber.copy_to(filename)
+        pass
 
     def get_monitors(self):
         result = subprocess.run(['system_profiler SPDisplaysDataType | grep -i resolution | awk \'{print $2 "x" $4}\''],
