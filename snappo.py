@@ -70,7 +70,7 @@ class ScreenGrabber:
 
     def grab(self, what, delay=0, which_desktop=""):
         if what in ['area', 'desktop', 'window']:
-            os.system(self.BASH_PATH + " " + what + " " + str(delay) + " " + which_desktop)
+            os.system(self.BASH_PATH + " " + what + " " + str(int(delay)) + " " + which_desktop)
             thumb = self.image_resolver.get_lens_icon()
             self.image_changing_notifier.set_icon(thumb)
             if PLATFORM_OS != 'Darwin':
