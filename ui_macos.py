@@ -90,8 +90,8 @@ class Snappo(SnappoAbstract):
         abspath = os.path.abspath(__file__)
         self.dirname = os.path.dirname(abspath)
 
-        self.app = rumps.App(self.APP_INDICATOR)
-        self.app.title = "📷"
+        self.app = rumps.App(self.APP_INDICATOR,  icon="macos/snappo.icns")
+        #self.app.title = "📷"
         self._build_menu()
 
     def _add_menu_item(self, label, callback):

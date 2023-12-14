@@ -1,6 +1,6 @@
 
-CC = python3
-CFLAGS = py2app --emulate-shell-environment
+CC = /opt/homebrew/bin/python3.11 
+CFLAGS = py2app -A --emulate-shell-environment
 RM = rm
 
 imgtocb:
