@@ -88,7 +88,9 @@ case "$what" in
      if [ -f "${TARGET_FILE}" ]; then
        text=$(${BARCODE_SCAN_CMD}  ${TARGET_FILE})
        if [ $? -eq 4 ]; then
-         text=$(${OCR_CMD} ${TARGET_FILE} stdout 2>/dev/null)
+	 cd /tmp      
+         #text=$(${OCR_CMD} ${TARGET_FILE} stdout 2>/dev/null)
+         text=$(${OCR_CMD} ./snappo.png stdout 2>/dev/null)
        fi
        echo -n "$text" |  ${CLIPBOARD_TXT_CMD}
      else
