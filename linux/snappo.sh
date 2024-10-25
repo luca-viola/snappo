@@ -7,7 +7,7 @@ SCREENSHOT_CMD="$(which gnome-screenshot)"
 CLIPBOARD_CMD="$(which xclip) -i -selection clipboard -target image/png"
 CLIPBOARD_TXT_CMD="$(which xclip) -sel c"
 WIN_CMD="$(which xdotool)"
-DISPLAY_CMD="$(which eog)"
+DISPLAY_CMD="$(which loupe)"
 BARCODE_SCAN_CMD="$(which zbarimg) --raw -q"
 OCR_CMD="$(which tesseract)"
 
