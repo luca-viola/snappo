@@ -1,2 +1,10 @@
-dist/
+# gnome-wayland
+gnome-wayland/dist/
 *.compiled
+
+# macos
+macos/build/
+macos/dist/
+macos/.eggs/
+__pycache__/
+.DS_Store
