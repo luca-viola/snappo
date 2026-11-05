@@ -1,0 +1,35 @@
+.snappo-countdown {
+  margin-left: 4px;
+  font-feature-settings: "tnum";
+}
+
+.snappo-empty .popup-menu-icon {
+  color: #e01b24;
+}
+
+.snappo-about .modal-dialog-content-box {
+  spacing: 8px;
+  padding: 24px 48px;
+}
+
+.snappo-about-title {
+  margin-top: 12px;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.snappo-about-section {
+  margin-top: 12px;
+}
+
+.snappo-about-link {
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: -st-accent-color;
+}
+
+.snappo-about-link:hover {
+  text-decoration: underline;
+}

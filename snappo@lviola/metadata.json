@@ -1,0 +1,9 @@
+{
+  "uuid": "snappo@lviola",
+  "name": "Snappo",
+  "description": "A screenshot tool with barcode and OCR capabilities. Grab the desktop, a monitor, a window or an area into the clipboard, then turn it into text.",
+  "shell-version": ["51"],
+  "settings-schema": "org.gnome.shell.extensions.snappo",
+  "url": "https://github.com/luca-viola/snappo",
+  "version-name": "2.0.0"
+}

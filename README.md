@@ -1,101 +1,75 @@
-# snappo
-### A Screen Snapshot tool with OCR capabilities
-Snappo stand for **SN**apshot **APP**licati**O**n. It is a useful tool to take snapshots of windows,
-areas of the screen, or the entire desktop in the system clipboard, for quick copy & paste exchanges
-with other applications. What makes Snappo different is the possibility to apply bar code recognition
-or OCR on the clipboard snapshot content: if the decoding or OCR will be successful, the clipboard
-will be set with the decoded or recognized text, leaving you with the possibility to easily paste it 
-elsewhere.  
+# Snappo
 
-Snappo is written in python using the pygtk library, and relies on gnome to function. The GUI is 
-designed as a frontend to a shell script that leverages a few commands to work its magic.
+**SN**apshot **APP**licati**O**n, a screenshot tool with barcode and OCR
+capabilities, as a GNOME Shell extension.
 
-### Dependencies
-**Linux**  
-*Binaries*:  
-`tesseract` (optical character recognition)  
-`zbarimg` (bar codes decoding)   
-`xclip`  (X Window clipboard for images)  
-`xsel` (Insert text into X Window Clipboard)   
-`xdotool`  (Select a window and give it focus)  
-`eog`  (Visualize grabbed imaged)  
-`gnome-screenshot` (grab the graphic data from the screen)  
-*Python*  
-`PyGObject` (Python Gtk Object bindings library)
+Grab the desktop, a monitor, a window or an area into the clipboard. Then, with
+one click, replace it with the text or barcode found in the image, ready to
+paste.
 
-### Installation
+This is a rewrite of the Python [Snappo](https://github.com/luca-viola/snappo).
+It runs inside GNOME Shell, so it works on Wayland without `gnome-screenshot`,
+`xclip`, `xdotool` or `xrandr`.
 
-##### Fedora
-`$ sudo dnf install python3-gobject gtk3`  
-`$ sudo dnf install tesseract zbar xclip xsel xdotool eog gnome-screenshot`  
+## Requirements
 
-##### Ubuntu
-`$ sudo apt update`  
-`$ sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0`  
-`$ sudo apt install tesseract-ocr zbar-tools xclip xsel xdotool eog gnome-screenshot`  
+- GNOME Shell 51
+- For OCR only: `tesseract` for text and `zbarimg` for barcodes
 
-In case of problems, more information about the installation of the python Gtk Object binding can be found [here](https://pygobject.readthedocs.io/en/latest/getting_started.html)
+Snappo works without the OCR tools. If one is missing when you click **OCR**,
+the notification names it and offers a **Copy command** button with the install
+command for your distro. Snappo never installs anything itself.
 
-**MacOS**  
-(Coming soon)
+| Distro | Command |
+| --- | --- |
+| Fedora, RHEL | `sudo dnf install tesseract zbar` |
+| Debian, Ubuntu | `sudo apt install tesseract-ocr zbar-tools` |
+| Arch | `sudo pacman -S tesseract tesseract-data-eng zbar` |
+| openSUSE | `sudo zypper install tesseract-ocr zbar` |
 
-### Usage
+## Installation
 
-#### Gnome Screenshots
-<table>
-  <tr>
-    <td><img src="docs/snappo_menu_gnome.png" alt="Main Menu" style="width:300px;"/></td>
-    <td valign="top">
-      <img src="docs/snappo_timer_gnome.png" alt="Delay slider" style="width:400px;"/><br />
-      <br />
-      <img src="docs/snappo_about_gnome.png" alt="About dialog" style="width:400px;"/><br />
-      <br />
-      <img src="docs/snappo_notification_gnome.png" alt="About dialog" style="width:400px;"/>
-    </td>  
-  </tr>
-</table>
+```sh
+make install
+```
 
-#### MacOS Screenshots
-<table>
-  <tr>
-    <td><img src="docs/snappo_menu_macos.png" alt="Main Menu" style="width:300px;"/></td>
-    <td valign="top">
-      <img src="docs/snappo_about_macos.png" alt="About dialog" style="width:400px;"/><br />
-      <br />
-      <img src="docs/snappo_notification_macos.png" alt="About dialog" style="width:400px;"/>
-    </td>  
-  </tr>
-</table>
+Log out and back in so GNOME Shell finds the extension, then:
 
-The usage is pretty straightforward. When started, an icon with a camera will appear in the gnome top menu bar.
-From this you can show the popup menu with some options:
+```sh
+gnome-extensions enable snappo@lviola
+```
 
-* **Grab Desktop**..  
-  Clicling on this the whole desktop (including multiple screens) will be snapshot into the clipboard.
-* **Grab Window**..  
-  Running under gnome/x11, this will show a selector with which you can choose a window to snap. Under wayland you 
-  need to select the window you want first, then select this menu voice to snap it.
-* **Grab Area**..  
-  This option will show a selector with which you can select a rectangular area on the screen to snap into the
-  clipboard.
-* **Set Delay**..  
-  This will open a small dialog in which you can put a delay before doing the snapshot. It is useful if you need to 
-  arrange the screen before the snap could be taken.
-* **Clipboard**.. 🚫 | 🔍  
-  This menu shows a 🚫 symbol when the clipboard is empty, and a 🔍 when it contains a snapshot image. By selecting it 
-  the content will be shown in the image viewer.
-* **Copy** ⎘  
-  This menu lets you reinsert the snapshot image in the clipboard, in case it was accidentally lost.
-* **Save As..** 💾  
-  (Gnome only) This menu lets you save the snapped content in a chosen file.
-* **Clear** ⌫  
-  This menu lets you erase the snapshot image from the clipboard and the persisted temporary file.
-* **OCR**  
-  By selecting this, Snappo will perform a barcode detection on the snapped image, decode it and put the resulting text
-  in the clipboard. If the barcode detection is unsuccessful, an optical character recognition will be performed, and 
-  the resulting text copied in the clipboard. The barcodes recognized are the ones supported by the zbar package, and 
-  the OCR is performed by the open source package tesseract.
-* **About**..  
-  Show an About dialog with credits and license.  
-* **Quit**  
-  Exits from Snappo and cleans up resources.
+`make uninstall` removes it. `make pack` builds a zip in `dist/`.
+
+## Usage
+
+Click the camera in the top bar.
+
+| Menu item | What it does |
+| --- | --- |
+| **Grab Desktop..** | Captures all monitors. Parts of the image no monitor covers are transparent. |
+| **1, 2, ...** | Captures one monitor, `*` marks the primary. Shown with two or more monitors. |
+| **Grab Window..** | Hover to highlight a window, click to capture it. Escape cancels. |
+| **Grab Area..** | Drag a rectangle. Escape cancels. |
+| **Set Delay..** | Seconds to wait, 0 to 100. The top bar shows the countdown. |
+| **Clipboard..** | Opens the snapshot in your image viewer. |
+| **Copy..** | Puts the snapshot back in the clipboard. |
+| **Save as..** | Saves the snapshot as a PNG file. |
+| **Clear..** | Empties the clipboard and deletes the snapshot. |
+| **OCR** | Looks for a barcode, then for text, and puts the result in the clipboard. |
+| **About..** | Shows credits and license. |
+
+With a delay set, you choose the window or area first and the capture happens
+after the countdown, so you can open a menu or a tooltip in the meantime. A
+window is captured even if something covers it by then. Starting another grab
+replaces one that is counting down.
+
+## Privacy
+
+The snapshot is stored in `$XDG_RUNTIME_DIR/snappo/`, readable only by you and
+deleted at logout. It stays there when the screen locks, but a countdown is
+cancelled so nothing captures the lock screen.
+
+## License
+
+GPL-3.0-or-later, see [LICENSE](LICENSE).

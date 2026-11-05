@@ -1,8 +1,2 @@
-.idea/
-snappo.iml
-/macos/build/
-/macos/dist/
-__pycache__/
-.DS_Store
-dist
-build
+dist/
+*.compiled
