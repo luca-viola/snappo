@@ -11,6 +11,7 @@ import objc
 from AppKit import *
 from Foundation import *
 from ui_abstract import *
+import permissions
 
 
 class ImageResolver(ImageResolverAbstract):
@@ -54,7 +55,11 @@ class Notification(NotificationAbstract):
         return self
 
     def show(self):
-        rumps.notification(self.app, self.summary, self.body, data=None, sound=True)
+        # rumps raises this when run without an app bundle, e.g. "python3 snappo.py".
+        try:
+            rumps.notification(self.app, self.summary, self.body, data=None, sound=True)
+        except RuntimeError:
+            Alert(self.summary, self.body).show()
 
 
 class Alert(object):
@@ -66,6 +71,8 @@ class Alert(object):
         self.buttonPressed = None
 
     def show(self):
+        # A menu bar app isn't frontmost, so its alert would open behind other windows.
+        NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
         alert = NSAlert.alloc().init()
         rect = NSMakeRect(0, 0, 400, 0)
         nsview = NSView.alloc().initWithFrame_(rect)
@@ -119,7 +126,7 @@ class Snappo(SnappoAbstract):
         self.delay_label_menu_item = self._add_menu_item(label="Set Delay..", callback=self.show_delay_dialog)
         self.delay_menu_item = self._add_direct_menu_item(rumps.SliderMenuItem(value=0, dimensions=(180,25), callback=self._set_delay))
         self._add_direct_menu_item(rumps.separator)
-        self.clipboard_menu_item = self._add_menu_item_with_icon(label="Clibpoard..", callback=self.screen_grabber.display, icon_id=ImageResolver().get_noimg_icon())
+        self.clipboard_menu_item = self._add_menu_item_with_icon(label="Clipboard..", callback=self.screen_grabber.display, icon_id=ImageResolver().get_noimg_icon())
         self.image_changing_notifier.set_image_changing_notifier(self.clipboard_menu_item)
         self.copy_menu_item = self._add_menu_item_with_icon(label="Copy..", callback=self.clipboard_manager.copy, icon_id=ImageResolver().get_copy_icon())
         self.save_as_menu_item = self._add_menu_item_with_icon(label="Save As..", callback=self.save_as, icon_id=ImageResolver().get_save_icon())
@@ -145,7 +152,24 @@ class Snappo(SnappoAbstract):
         time.sleep(delay)
         self.clipboard_menu_item.set_icon(ImageResolver().get_lens_icon())
 
+    def _can_record_screen(self):
+        if permissions.has_screen_recording_access():
+            return True
+
+        answer = Alert(
+            "Snappo needs Screen Recording permission",
+            "Without it, macOS only lets Snappo capture the desktop wallpaper, "
+            "not your windows.\n\n"
+            "Allow Snappo in System Settings, then quit and reopen it.",
+            ["Open System Settings", "Cancel"]).show()
+        if answer == NSAlertFirstButtonReturn:
+            permissions.request_screen_recording_access()
+            permissions.open_screen_recording_settings()
+        return False
+
     def _grab(self, what, delay=0, which_desktop=""):
+        if not self._can_record_screen():
+            return
         self.screen_grabber.grab(what, delay, which_desktop)
         x = threading.Thread(target=self._update_clipboard_icon, args=(delay,))
         x.start()
@@ -164,7 +188,7 @@ class Snappo(SnappoAbstract):
         self._grab("area", self.delay)
 
     def show_about_dialog(self, widget):
-        press = Alert("Snappo", "A Screenshot tool with Barcode/OCR capabilites\n\nVer: "+self.version+"\n\n© 2022 by Luca Viola\n\nSnappo on github: https://github.com/luca-viola/snappo\nLicense: GPL V3 - http://www.gnu.org/licenses/").show()
+        press = Alert("Snappo", "A Screenshot tool with Barcode/OCR capabilities\n\nVer: "+self.version+"\n\n© 2022 by Luca Viola\n\nSnappo on github: https://github.com/luca-viola/snappo\nLicense: GPL V3 - http://www.gnu.org/licenses/").show()
 
     def show_delay_dialog(self, widget):
         Cocoa.NSBeep()
