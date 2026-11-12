@@ -3,6 +3,8 @@
 DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 cd ${DIR}
 
+export PATH="${PATH}:/opt/homebrew/bin:/usr/local/bin"
+
 TARGET_FILE="/tmp/snappo.png"
 SCREENSHOT_CMD="$(which screencapture)"
 # Inside the .app, use its own Python, which has PyObjC.

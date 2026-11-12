@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
+import shutil
 import signal
+import subprocess
 
 from ui_abstract import *
 
 import rumps
-from ui_macos import Snappo, ImageResolver, Notification
+from AppKit import NSAlertFirstButtonReturn, NSAlertSecondButtonReturn
+from ui_macos import Snappo, ImageResolver, Notification, Alert
+
+# An app started from Finder gets a minimal PATH, without Homebrew's folders.
+for _folder in ("/opt/homebrew/bin", "/usr/local/bin"):
+    if _folder not in os.environ.get("PATH", "").split(":"):
+        os.environ["PATH"] = os.environ.get("PATH", "") + ":" + _folder
 rumps.debug_mode(True)
 
 BASH_PATH = os.path.dirname(os.path.abspath(__file__)) + "/snappo.sh"
@@ -55,6 +63,8 @@ class ClipBoardManager:
 
 
 class ScreenGrabber:
+    zbar_warned = False
+
     def __init__(self, notification_manager, image_resolver, image_changing_notifier):
         self.notification_manager = notification_manager
         self.image_resolver = image_resolver
@@ -67,7 +77,38 @@ class ScreenGrabber:
             thumb = self.image_resolver.get_lens_icon()
             self.image_changing_notifier.set_icon(thumb)
 
+    INSTALL_COMMAND = "brew install tesseract zbar"
+    BREW_URL = "https://brew.sh"
+
+    def _show_missing_tools_alert(self, missing):
+        answer = Alert(
+            "OCR needs " + " and ".join(missing),
+            "Snappo reads text with Tesseract and barcodes with zbar. "
+            "Install them with Homebrew by typing this in Terminal:\n\n"
+            "    " + self.INSTALL_COMMAND + "\n\n"
+            "If Terminal says \"brew: command not found\", install Homebrew "
+            "first: open " + self.BREW_URL + " and paste the one-line command "
+            "from its front page into Terminal. Then run the line above.\n\n"
+            "Then press OCR again. No restart is needed.",
+            ["Copy Install Command", "Open brew.sh", "Close"]).show()
+        if answer == NSAlertFirstButtonReturn:
+            subprocess.run(["pbcopy"], input=self.INSTALL_COMMAND.encode())
+        elif answer == NSAlertSecondButtonReturn:
+            subprocess.run(["open", self.BREW_URL])
+
     def ocr(self, widget):
+        # Tesseract does the text. zbar is optional: without it barcodes are skipped.
+        if shutil.which("tesseract") is None:
+            missing = ["Tesseract"]
+            if shutil.which("zbarimg") is None:
+                missing.append("zbar")
+            self._show_missing_tools_alert(missing)
+            return
+        if shutil.which("zbarimg") is None and not self.zbar_warned:
+            self.zbar_warned = True
+            self.notification_manager.new(
+                "Barcode reading is off.",
+                "zbar isn't installed. To enable it, run: brew install zbar").show()
         ret = os.system(self.BASH_PATH + " ocr")
         if ret == 0:
             self.notification_manager.new("OCR Completed.", "You can now press CTRL+V to paste text.").show()
