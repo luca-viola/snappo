@@ -8,3 +8,6 @@ imgtocb:
 
 clean:
 	rm -rf build dist
+
+release:
+	./release.sh
