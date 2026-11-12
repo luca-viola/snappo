@@ -6,5 +6,6 @@ gnome-wayland/dist/
 macos/build/
 macos/dist/
 macos/.eggs/
+macos/.venv/
 __pycache__/
 .DS_Store
