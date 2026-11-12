@@ -10,7 +10,7 @@ OPTIONS = {
         # macOS tracks permissions by this ID. Notifications also need it.
         'CFBundleIdentifier': 'io.github.luca-viola.snappo',
     },
-    'packages': ['rumps', 'objc', 'os', 'subprocess', 'ctypes', 'Cocoa', 'AppKit', 'Foundation'],
+    'packages': ['rumps', 'objc', 'Cocoa', 'AppKit', 'Foundation'],
 }
 
 setup(

@@ -5,7 +5,13 @@ cd ${DIR}
 
 TARGET_FILE="/tmp/snappo.png"
 SCREENSHOT_CMD="$(which screencapture)"
-CLIPBOARD_CMD="./imgtocb.py -"
+# Inside the .app, use its own Python, which has PyObjC.
+BUNDLED_PYTHON="../MacOS/python"
+if [ -x "${BUNDLED_PYTHON}" ]; then
+  CLIPBOARD_CMD="env RESOURCEPATH=${DIR} ${BUNDLED_PYTHON} ./imgtocb.py -"
+else
+  CLIPBOARD_CMD="./imgtocb.py -"
+fi
 CLIPBOARD_TXT_CMD="$(which pbcopy)"
 DISPLAY_CMD="$(which open)"
 BARCODE_SCAN_CMD="$(which zbarimg) --raw -q"
